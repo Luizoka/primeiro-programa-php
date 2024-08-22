@@ -1,14 +1,10 @@
 <?php
-
-$saldo = 0;
-main();
-
 function main()
 {
-    global $saldo;
+    $saldo = 0;
 
     while (true) {
-        echo "Digite uma opção:\n";
+        echo "\nEscolha uma opção:\n";
         echo "1 - Depositar\n";
         echo "2 - Sacar\n";
         echo "3 - Consultar saldo\n";
@@ -17,52 +13,69 @@ function main()
         $opcao = intval(trim(fgets(STDIN)));
 
         if ($opcao == 0) {
+            echo "Saindo...\n";
             break;
         }
 
         switch ($opcao) {
             case 1:
-                echo "Digite a quantidade a depositar: ";
-                $quantidade = intval(trim(fgets(STDIN)));
-                depositar($quantidade);
+                $saldo = depositar($saldo);
                 break;
             case 2:
-                echo "Digite a quantidade a sacar: ";
-                $quantidade = intval(trim(fgets(STDIN)));
-                sacar($quantidade);
+                $saldo = sacar($saldo);
                 break;
             case 3:
-                consultar();
+                consultar($saldo);
                 break;
             default:
-                echo "Opção inválida.\n";
+                echo "Opção inválida. Por favor, tente novamente.\n";
                 break;
         }
     }
+
     echo "Saldo final: $saldo\n";
 }
 
-function depositar($quantidade)
+function depositar($saldo)
 {
-    global $saldo;
-    $saldo += $quantidade;
-    echo "Depósito realizado. Saldo atual: $saldo\n";
-}
+    echo "Digite a quantidade a depositar: ";
+    $quantidade = intval(trim(fgets(STDIN)));
 
-function sacar($quantidade)
-{
-    global $saldo;
-    if ($quantidade > $saldo) {
-        echo "Saldo insuficiente para saque.\n";
+    if ($quantidade > 0) {
+        $saldo += $quantidade;
+        echo "Depósito realizado com sucesso. Saldo atual: $saldo\n";
     } else {
-        $saldo -= $quantidade;
-        echo "Saque realizado. Saldo atual: $saldo\n";
+        echo "Valor inválido para depósito. Por favor, insira um valor positivo.\n";
     }
+
+    return $saldo;
 }
 
-function consultar()
+function sacar($saldo)
 {
-    global $saldo;
-    echo "Saldo atual: $saldo\n";
+    echo "Digite a quantidade a sacar: ";
+    $quantidade = intval(trim(fgets(STDIN)));
+
+    if ($quantidade > 0) {
+        if ($quantidade <= $saldo) {
+            $saldo -= $quantidade;
+            echo "Saque realizado com sucesso. Saldo atual: $saldo\n";
+        } else {
+            echo "Saldo insuficiente para saque. Saldo atual: $saldo\n";
+        }
+    } else {
+        echo "Valor inválido para saque. Por favor, insira um valor positivo.\n";
+    }
+
+    return $saldo;
 }
+
+function consultar($saldo)
+{
+    echo "Seu saldo atual é: $saldo\n";
+}
+
+// Chama a função principal para iniciar o programa
+main();
+
 ?>
